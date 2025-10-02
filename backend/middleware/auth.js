@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export function verifyToken(req, res, next) {
+export default function verifyToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -8,12 +8,10 @@ export function verifyToken(req, res, next) {
     return res.status(401).json({ message: 'No token provided' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
-    if (err) {
-      return res.status(403).json({ message: 'Invalid or expired token' });
-    }
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  if (err) return res.sendStatus(403);
+  req.user = decoded.userId;
+  next();
+});
 
-    req.userId = payload.userId;
-    next();
-  });
 }
