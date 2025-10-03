@@ -1,0 +1,26 @@
+<h2>Your Lists</h2>
+
+<ul style="list-style: none; padding: 0;">
+  <li *ngFor="let list of lists" style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+
+    <ng-container *ngIf="editingListId === list._id; else displayMode">
+      <input [(ngModel)]="editedListName" placeholder="List name" style="flex: 2; padding: 4px;" />
+      <button (click)="saveEditList(list)" style="padding: 4px 8px;">Save</button>
+      <button (click)="cancelEditList()" style="padding: 4px 8px;">Cancel</button>
+    </ng-container>
+
+    <ng-template #displayMode>
+      <a [routerLink]="['/lists', list._id]" style="flex: 2;">{{ list.name }}</a>
+      <button (click)="startEditingList(list)" style="padding: 4px 8px;">Edit</button>
+      <button (click)="deleteList(list._id)" style="padding: 4px 8px;">Delete</button>
+    </ng-template>
+
+  </li>
+</ul>
+
+<div *ngIf="creatingNewList" style="margin-top: 12px; display: flex; gap: 8px; align-items: center;">
+  <input [(ngModel)]="newListName" placeholder="List name" style="flex: 2; padding: 4px;" />
+  <button (click)="addList()" style="padding: 4px 8px;">Add</button>
+</div>
+
+<button (click)="creatingNewList = !creatingNewList" style="margin-top: 8px; padding: 4px 8px;">+ New List</button>

@@ -6,19 +6,20 @@ import User from '../models/User.js';
 const router = express.Router();
 
 function createAccessToken(userId) {
-    //return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '10m' });
-    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '10s' }); //testing
+    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '10m' });
+    //return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '10s' }); //testing
 }
 
 function createRenewToken(userId) {
     const now = Math.floor(Date.now() / 1000);
     
-    //const nbf = now + 9 * 60; // not active for 9 minutes
-    const nbf = now + 9 // testing
+    const nbf = now + 9 * 60; // not active for 9 minutes
+    //const nbf = now + 9 // testing
 
     return jwt.sign({ userId, nbf }, process.env.JWT_SECRET, { expiresIn: '1h'});
 }
 
+// register user
 router.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -47,6 +48,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// login user
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -71,6 +73,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// renew tokens
 router.post('/renew', async (req, res) => {
     try {
         const { renewToken } = req.body;

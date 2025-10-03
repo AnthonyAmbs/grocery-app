@@ -25,7 +25,7 @@ export class ListsService {
 
   constructor(private http: HttpClient) {}
 
-    // create a new list
+  // create a new list
   createList(name: string): Observable<List> {
     return this.http.post<List>(this.apiUrl, { name });
   }
@@ -55,7 +55,7 @@ export class ListsService {
     return this.http.post<List>(`${this.apiUrl}/${listId}/items`, item);
   }
 
-  // update in item in a list
+  // update an item in a list
   updateItem(listId: string, itemId: string, item: Partial<Item>): Observable<List> {
     return this.http.put<List>(`${this.apiUrl}/${listId}/items/${itemId}`, item);
   }

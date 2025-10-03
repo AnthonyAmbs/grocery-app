@@ -1,3 +1,18 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ListsComponent } from './pages/lists/lists';
+import { LoginComponent } from './components/login-component/login-component';
+import { ListDetailComponent } from './pages/list-detail/list-detail';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'lists', component: ListsComponent },
+  { path: 'lists/:id', component: ListDetailComponent },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}
