@@ -1,1 +1,1 @@
-Link: https://mygroceryapp24.netlify.app/
+https://mygroceryapp24.netlify.app/
