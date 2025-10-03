@@ -89,4 +89,8 @@ export class ListsComponent implements OnInit {
       error: err => console.error(err)
     });
   }
+
+  goToSettings() {
+    this.router.navigate(['/settings']);
+  }
 }

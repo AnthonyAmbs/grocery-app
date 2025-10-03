@@ -43,6 +43,10 @@ export class AuthService {
     );
   } 
 
+  updateUser(data: any) {
+    return this.http.put('/auth/update', data, { withCredentials: true });
+  }
+
   renewTokens() {
     const renewTokenFromStorage = this.isBrowser ? localStorage.getItem('renewToken') : null;
     return this.http.post<any>(`${this.apiUrl}/renew`, {

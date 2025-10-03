@@ -10,12 +10,9 @@ bootstrapApplication(App, {
     provideHttpClient(
       withFetch(),
       withInterceptors([
-        (req, next) => {
-          const cloned = req.clone({ withCredentials: true });
-          return next(cloned);
-        }
+        (req, next) => next(req.clone({ withCredentials: true }))
       ])
     )
   ]
 })
-.catch((err) => console.error(err));
+.catch(err => console.error(err));

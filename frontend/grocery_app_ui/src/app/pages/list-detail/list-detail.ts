@@ -138,4 +138,8 @@ export class ListDetailComponent implements OnInit {
   goBack() {
     this.router.navigate(['/lists']);
   }
+
+  goToSettings() {
+    this.router.navigate(['/settings']);
+  }
 }

@@ -2,11 +2,12 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
 function createAccessToken(userId) {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' }); // 7 days
+  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' }); 
 }
 
 // register user
@@ -33,7 +34,6 @@ router.post('/register', async (req, res) => {
 
         const token = createAccessToken(user._id);
 
-        
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -78,6 +78,22 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// update account details
+router.put('/update', verifyToken, async (req, res) => {
+  const { newUsername, newEmail, newPassword, password } = req.body;
+
+  const user = await User.findById(req.user);
+  const isMatch = await bcrypt.compare(password, user.passwordHash);
+  if (!isMatch) return res.status(400).json({ message: 'Invalid password' });
+
+  if (newUsername) user.username = newUsername;
+  if (newEmail) user.email = newEmail;
+  if (newPassword) user.passwordHash = await bcrypt.hash(newPassword, 10);
+
+  await user.save();
+  res.json({ message: 'User updated' });
+});
+
 
 // renew tokens
 router.post('/renew', async (req, res) => {
@@ -91,6 +107,12 @@ router.post('/renew', async (req, res) => {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
+});
+
+// logout
+router.post('/logout', verifyToken, (req, res) => {
+  res.clearCookie('token');
+  res.json({ message: 'Logged out successfully' });
 });
 
 export default router;

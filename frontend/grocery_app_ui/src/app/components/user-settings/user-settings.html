@@ -1,0 +1,25 @@
+<button (click)="goBack()" style="margin-bottom: 10px;">← Back</button>
+
+<div *ngIf="step === 'menu'">
+  <h2>User Settings</h2>
+  <button (click)="selectAction('username')">Change Username</button>
+  <button (click)="selectAction('email')">Change Email</button>
+  <button (click)="selectAction('password')">Change Password</button>
+</div>
+
+<div *ngIf="step === 'verify'">
+  <h3>Verify Your Credentials</h3>
+  <input [(ngModel)]="currentUsername" placeholder="Current Username">
+  <input [(ngModel)]="currentPassword" type="password" placeholder="Current Password">
+  <button (click)="verifyCredentials()">Verify</button>
+  <button (click)="reset()">Cancel</button>
+  <div *ngIf="error" style="color:red">{{error}}</div>
+</div>
+
+<div *ngIf="step === 'change'">
+  <h3>Enter New {{action}}</h3>
+  <input [(ngModel)]="newValue" [placeholder]="'New ' + action">
+  <button (click)="submitChange()">Save</button>
+  <button (click)="reset()">Cancel</button>
+  <div *ngIf="error" style="color:red">{{error}}</div>
+</div>
