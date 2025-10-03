@@ -1,17 +1,27 @@
 import jwt from 'jsonwebtoken';
 
-export default function verifyToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+export function verifyToken(req, res, next) {
 
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
+  const token = req.cookies.token;
+  if (!token) return res.sendStatus(401);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-  if (err) return res.sendStatus(403);
-  req.user = decoded.userId;
-  next();
-});
+    if (err) return res.sendStatus(403);
 
+    req.user = decoded.userId;
+
+    const newToken = jwt.sign(
+      { userId: decoded.userId },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+    res.cookie('token', newToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    next();
+  });
 }

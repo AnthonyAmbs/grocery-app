@@ -1,10 +1,9 @@
-<button (click)="goBack()" style="margin-bottom: 12px; padding: 4px 8px;">← Back </button>
+<button (click)="goBack()" style="margin-bottom: 12px; padding: 4px 8px;">← Back</button>
 
 <h2>{{ listName }}</h2>
 
 <ul style="list-style: none; padding: 0;">
-  <li *ngFor="let item of items; trackBy: trackById"
-      style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+  <li *ngFor="let item of items; trackBy: trackById" style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
 
     <button (click)="toggleFound(item)">
       {{ item.found ? '✓' : '○' }}
@@ -31,10 +30,14 @@
   </li>
 </ul>
 
+<button (click)="showNewItemForm = !showNewItemForm" style="margin-top:12px; padding:4px 8px;">
+  + Add Item
+</button>
 
-<div style="margin-top: 12px; display: flex; gap: 8px; align-items: center;">
-  <input [(ngModel)]="newItemName" placeholder="New item" style="flex: 2; padding: 4px;" />
-  <input [(ngModel)]="newItemQuantity" placeholder="Quantity" type="number" style="width: 60px; padding: 4px;" />
-  <input [(ngModel)]="newItemCategory" placeholder="Category" style="flex: 1; padding: 4px;" />
-  <button (click)="addItem()" style="padding: 4px 8px;">Add</button>
+<div *ngIf="showNewItemForm" style="margin-top: 8px; display: flex; gap: 8px; align-items: center;">
+  <input [(ngModel)]="newItemName" placeholder="New item" style="flex:2; padding:4px;" />
+  <input [(ngModel)]="newItemQuantity" placeholder="Quantity" type="number" style="width:60px; padding:4px;" />
+  <input [(ngModel)]="newItemCategory" placeholder="Category" style="flex:1; padding:4px;" />
+  <button (click)="addItem()" style="padding:4px 8px;">Add</button>
+  <button (click)="showNewItemForm = false" style="padding:4px 8px;">Cancel</button>
 </div>

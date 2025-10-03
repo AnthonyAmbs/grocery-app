@@ -25,6 +25,8 @@ export class ListDetailComponent implements OnInit {
   editedItemQuantity: number | null = null;
   editedItemCategory = '';
 
+  showNewItemForm = false;
+
   constructor(
     private route: ActivatedRoute,
     private listsService: ListsService,
