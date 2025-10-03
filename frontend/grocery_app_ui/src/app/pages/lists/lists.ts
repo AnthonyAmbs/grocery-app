@@ -52,6 +52,7 @@ export class ListsComponent implements OnInit {
     this.listsService.createList(this.newListName).subscribe({
       next: list => {
         this.lists.push(list);
+        this.cdr.detectChanges();
         this.newListName = '';
         this.creatingNewList = false;
       },
@@ -71,6 +72,7 @@ export class ListsComponent implements OnInit {
       next: updated => {
         list.name = updated.name;
         this.cancelEditList();
+        this.cdr.detectChanges();
       },
       error: err => console.error(err)
     });
