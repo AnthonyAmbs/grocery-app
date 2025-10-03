@@ -11,7 +11,7 @@ const app = express();
 
 app.use(cors({
   //origin: 'http://localhost:4200',
-  origin: 'https://your-netlify-domain.netlify.app',
+  origin: 'https://mygroceryapp24.netlify.app',
   credentials: true,
 }));
 
