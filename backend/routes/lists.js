@@ -55,7 +55,6 @@ router.put('/:id', verifyToken, async (req, res) => {
   res.json(list);
 });
 
-
 // delete list
 router.delete('/:id', verifyToken, async (req, res) => {
   const list = await List.findById(req.params.id);

@@ -5,6 +5,10 @@
 <ul style="list-style: none; padding: 0;">
   <li *ngFor="let item of items" style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
 
+    <button (click)="toggleFound(item)">
+      {{ item.found ? '✓' : '○' }}
+    </button>
+
     <ng-container *ngIf="editingItemId === item._id; else displayMode">
       <input [(ngModel)]="editedItemName" placeholder="Item name" style="flex: 2; padding: 4px;" />
       <input [(ngModel)]="editedItemQuantity" placeholder="Quantity" type="number" style="width: 60px; padding: 4px;" />
@@ -14,7 +18,7 @@
     </ng-container>
 
     <ng-template #displayMode>
-      <span style="flex: 2;">
+      <span [class.found]="item.found" style="flex: 2;">
         {{ item.name }}
         <span *ngIf="item.quantity">({{ item.quantity }})</span>
         <span *ngIf="item.category"> - {{ item.category }}</span>

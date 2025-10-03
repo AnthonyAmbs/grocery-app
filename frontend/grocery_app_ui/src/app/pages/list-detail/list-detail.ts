@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 export class ListDetailComponent implements OnInit {
   listId: string | null = null;
   listName = '';
-  items: Item[] = [];
+  items: (Item & { found?: boolean })[] = [];
 
   newItemName = '';
   newItemQuantity: number | null = null;
@@ -71,6 +71,20 @@ export class ListDetailComponent implements OnInit {
       error: err => console.error('Add item failed', err)
     });
   }
+
+  toggleFound(item: Item) {
+  if (!this.listId || !item._id) return;
+    const updated = { found: !item.found };
+    this.listsService.updateItem(this.listId, item._id, updated).subscribe({
+      next: (updatedList) => {
+        this.items = this.items.map(i =>
+          i._id === item._id ? { ...i, found: updated.found } : i
+        );
+      },
+      error: err => console.error('Failed to update item', err)
+    });
+  }
+
 
   deleteItem(itemId: string | undefined) {
     if (!this.listId || !itemId) return;

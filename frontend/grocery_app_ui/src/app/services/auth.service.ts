@@ -32,8 +32,16 @@ export class AuthService {
   }
 
   register(username: string, email: string, password: string) {
-    return this.http.post<any>(`${this.apiUrl}/register`, { username, email, password });
-  }
+    return this.http.post<{ accessToken: string; renewToken: string; user: any }>(
+      `${this.apiUrl}/register`,
+      { username, email, password }
+    ).pipe(
+      tap(response => {
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('renewToken', response.renewToken);
+      })
+    );
+  } 
 
   renewTokens() {
     const renewTokenFromStorage = this.isBrowser ? localStorage.getItem('renewToken') : null;
@@ -50,7 +58,6 @@ export class AuthService {
       })
     );
   }
-
 
   getAccessToken() {
     return this.accessToken || (this.isBrowser ? localStorage.getItem('accessToken') : null);

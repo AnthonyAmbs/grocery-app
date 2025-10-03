@@ -41,8 +41,15 @@ router.post('/register', async (req, res) => {
         const user = new User({ username, email, passwordHash })
         await user.save();
 
-        res.status(201).json({ message: 'User created successfully' });
-        } catch (err) {
+        const accessToken = createAccessToken(user._id);
+        const renewToken = createRenewToken(user._id);
+
+        res.status(201).json({
+            accessToken,
+            renewToken,
+            user: { id: user._id, username: user.username, email: user.email }
+        });
+    } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
@@ -54,14 +61,12 @@ router.post('/login', async (req, res) => {
         const { username, password } = req.body;
 
         const user = await User.findOne({ username });
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
+        if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+
 
         const isMatch = await bcrypt.compare(password, user.passwordHash);
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
+        if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
 
         const accessToken = createAccessToken(user._id);
         const renewToken = createRenewToken(user._id);
@@ -80,10 +85,7 @@ router.post('/renew', async (req, res) => {
 
         if (!renewToken) {
             return res.status(400).json({ message: "No renew token provided" });
-
         }
-
-
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });

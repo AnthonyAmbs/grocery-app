@@ -7,6 +7,7 @@ export interface Item {
   name: string;
   quantity?: number;
   category?: string;
+  found?: boolean;
 }
 
 export interface List {

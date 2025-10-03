@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './register-component.html',
   styleUrls: ['./register-component.scss']
 })
+
 export class RegisterComponent {
   username = '';
   email = '';
@@ -27,7 +28,7 @@ export class RegisterComponent {
     }
 
     this.authService.register(this.username, this.email, this.password).subscribe({
-      next: () => this.router.navigate(['/login']),
+      next: () => this.router.navigate(['/lists']),
       error: err => this.errorMessage = err.error?.message || 'Registration failed'
     });
   }

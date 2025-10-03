@@ -5,7 +5,8 @@ const { Schema } = mongoose;
 const ItemSchema = new mongoose.Schema({
     name: { type: String, required: true },
     quantity: { type: Number, default: 1 },
-    category: { type: String }
+    category: { type: String },
+    found: { type: Boolean, default: false }
 });
 
 const ListSchema = new Schema({
