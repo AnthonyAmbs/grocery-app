@@ -31,8 +31,8 @@ export class AuthService {
     );
   }
 
-  register(username: string, password: string) {
-    return this.http.post<any>(`${this.apiUrl}/register`, { username, password });
+  register(username: string, email: string, password: string) {
+    return this.http.post<any>(`${this.apiUrl}/register`, { username, email, password });
   }
 
   renewTokens() {

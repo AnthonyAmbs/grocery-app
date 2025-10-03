@@ -3,8 +3,10 @@
 <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
 <input [(ngModel)]="username" placeholder="Username" />
+<input [(ngModel)]="email" placeholder="email" />
 <input [(ngModel)]="password" type="password" placeholder="Password" />
 <input [(ngModel)]="confirmPassword" type="password" placeholder="Confirm Password" />
 
 <button (click)="register()">Register</button>
-<a routerLink="/login">Back to Login</a>
+<button type="button" (click)="navigateToLogin()">Back to Login</button>
+

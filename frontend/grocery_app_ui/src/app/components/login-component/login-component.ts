@@ -23,4 +23,8 @@ export class LoginComponent {
       error: err => this.error = err.error?.message || 'Login failed'
     });
   }
+
+  navigateToRegister() {
+    this.router.navigate(['/register']);
+  }
 }

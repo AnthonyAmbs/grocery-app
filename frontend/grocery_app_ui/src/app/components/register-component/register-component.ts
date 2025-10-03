@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterComponent {
   username = '';
+  email = '';
   password = '';
   confirmPassword = '';
   errorMessage = '';
@@ -20,14 +21,18 @@ export class RegisterComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   register() {
-    if (!this.username || !this.password || this.password !== this.confirmPassword) {
+    if (!this.username || !this.email || !this.password || this.password !== this.confirmPassword) {
       this.errorMessage = 'Please fill in all fields and make sure passwords match';
       return;
     }
 
-    this.authService.register(this.username, this.password).subscribe({
+    this.authService.register(this.username, this.email, this.password).subscribe({
       next: () => this.router.navigate(['/login']),
       error: err => this.errorMessage = err.error?.message || 'Registration failed'
     });
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 }
