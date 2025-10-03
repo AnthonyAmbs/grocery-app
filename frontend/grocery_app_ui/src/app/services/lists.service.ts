@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Item {
   _id?: string;
@@ -22,7 +23,7 @@ export interface List {
   providedIn: 'root'
 })
 export class ListsService {
-  private apiUrl = 'http://localhost:5000/lists';
+  private apiUrl = `${environment.apiBaseUrl}/lists`;
 
   constructor(private http: HttpClient) {}
 
