@@ -6,8 +6,7 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private accessToken: string | null = null;
-  private renewToken: string | null = null;
+  private currentUser: any = null;
   private isBrowser: boolean;
 
   constructor(
@@ -22,24 +21,24 @@ export class AuthService {
   login(username: string, password: string) {
     return this.http.post<any>(`${this.apiUrl}/login`, { username, password }).pipe(
       tap(res => {
-        this.accessToken = res.accessToken;
-        this.renewToken = res.renewToken;
+        this.currentUser = res.user;
         if (this.isBrowser) {
-          if (this.accessToken) localStorage.setItem('accessToken', this.accessToken);
-          if (this.renewToken) localStorage.setItem('renewToken', this.renewToken);
+          localStorage.setItem('user', JSON.stringify(res.user));
         }
       })
     );
   }
 
-  register(username: string, email: string, password: string) {
+  register(username: string, password: string) {
     return this.http.post<{ accessToken: string; renewToken: string; user: any }>(
       `${this.apiUrl}/register`,
-      { username, email, password }
+      { username, password }
     ).pipe(
-      tap(response => {
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('renewToken', response.renewToken);
+      tap(res => {
+      this.currentUser = res.user;
+      if (this.isBrowser) {
+        localStorage.setItem('user', JSON.stringify(res.user))
+      }
       })
     );
   } 
@@ -48,32 +47,18 @@ export class AuthService {
     return this.http.put('/auth/update', data, { withCredentials: true });
   }
 
-  renewTokens() {
-    const renewTokenFromStorage = this.isBrowser ? localStorage.getItem('renewToken') : null;
-    return this.http.post<any>(`${this.apiUrl}/renew`, {
-      renewToken: this.renewToken || renewTokenFromStorage
-    }).pipe(
-      tap(res => {
-        this.accessToken = res.accessToken;
-        this.renewToken = res.renewToken;
-        if (this.isBrowser) {
-          if (this.accessToken) localStorage.setItem('accessToken', this.accessToken);
-          if (this.renewToken) localStorage.setItem('renewToken', this.renewToken);
-        }
-      })
-    );
-  }
-
-  getAccessToken() {
-    return this.accessToken || (this.isBrowser ? localStorage.getItem('accessToken') : null);
+  getCurrentUser() {
+    return this.currentUser || (this.isBrowser ? JSON.parse(localStorage.getItem('user') || 'null') : null);
   }
 
   logout() {
-    this.accessToken = null;
-    this.renewToken = null;
-    if (this.isBrowser) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('renewToken');
-    }
+    return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true}).pipe(
+      tap(() => {
+        this.currentUser = null;
+        if (this.isBrowser) {
+          localStorage.removeItem('user');
+        }
+      })
+    );
   }
 }

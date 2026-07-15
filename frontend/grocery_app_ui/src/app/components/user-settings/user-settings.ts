@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class UserSettingsComponent {
   step: 'menu' | 'verify' | 'change' = 'menu'; 
-  action: 'username' | 'email' | 'password' | null = null;
+  action: 'username' | 'password' | null = null;
 
   currentUsername = '';
   currentPassword = '';
@@ -28,7 +28,7 @@ export class UserSettingsComponent {
     this.router.navigate(['/lists']);
   }
 
-  selectAction(action: 'username' | 'email' | 'password') {
+  selectAction(action: 'username' | 'password') {
     this.action = action;
     this.step = 'verify';
     this.error = '';
@@ -53,7 +53,6 @@ export class UserSettingsComponent {
 
     let body: any = {};
     if (this.action === 'username') body.newUsername = this.newValue;
-    if (this.action === 'email') body.newEmail = this.newValue;
     if (this.action === 'password') body.newPassword = this.newValue;
 
     this.authService.updateUser(body).subscribe({
