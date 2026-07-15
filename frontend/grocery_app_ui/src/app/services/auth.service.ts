@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap, map, catchError } from 'rxjs';
+import { tap, map, catchError, of } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../environments/environment';
 
@@ -62,7 +62,7 @@ export class AuthService {
         if (this.isBrowser) {
           localStorage.removeItem('user');
         }
-        return false;
+        return of(false);
       })
     );
   }
