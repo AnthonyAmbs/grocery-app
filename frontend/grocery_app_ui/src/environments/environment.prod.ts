@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://your-backend-on-render.com'
+  apiBaseUrl: 'https://grocery-app-1pd3.onrender.com'
 };

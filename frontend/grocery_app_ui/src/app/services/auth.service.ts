@@ -16,7 +16,7 @@ export class AuthService {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
-  private apiUrl = `${environment.apiBaseUrl}/lists`;
+  private apiUrl = `${environment.apiBaseUrl}/auth`;
 
   login(username: string, password: string) {
     return this.http.post<any>(`${this.apiUrl}/login`, { username, password }, { withCredentials: true }).pipe(
