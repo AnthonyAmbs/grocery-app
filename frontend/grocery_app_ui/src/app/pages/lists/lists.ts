@@ -29,11 +29,6 @@ export class ListsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const token = this.authService.getAccessToken();
-    if (!token) {
-      this.router.navigate(['/login']);
-      return;
-    }
     this.loadLists();
   }
 

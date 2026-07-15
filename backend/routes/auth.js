@@ -89,6 +89,18 @@ router.put('/update', verifyToken, async (req, res) => {
   res.json({ message: 'User updated' });
 });
 
+// get current user
+router.get('/me', verifyToken, async (req, res) => {
+  try{
+    const user = await User.findById(req.user).select('username');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ user: { id: user._id, username: user.username } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // logout
 router.post('/logout', verifyToken, (req, res) => {
   res.clearCookie('token');
